@@ -479,6 +479,7 @@ cron.schedule('0 22 * * 5', () => {
 
 (async () => {
   try {
+    console.log("TOKEN carregado?", TOKEN ? "SIM" : "NÃO");
     console.log('🔐 Tentando login...');
     await client.login(TOKEN);
   } catch (error) {
