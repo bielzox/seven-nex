@@ -476,4 +476,6 @@ cron.schedule('0 22 * * 5', () => {
 /* ================= LOGIN ================= */
 
 console.log("TOKEN:", process.env.TOKEN);
-client.login(process.env.TOKEN);
+client.login(process.env.TOKEN)
+  .then(() => console.log("Login feito com sucesso"))
+  .catch(err => console.error("Erro no login:", err));
