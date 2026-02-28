@@ -12,8 +12,6 @@ const {
     TextInputStyle
 } = require('discord.js');
 
-require('dotenv').config();
-
 const fs = require('fs');
 const cron = require('node-cron');
 const express = require("express");
@@ -482,7 +480,7 @@ cron.schedule('0 22 * * 5', () => {
 (async () => {
   try {
     console.log('🔐 Tentando login...');
-    await client.login(process.env.TOKEN);
+    await client.login(TOKEN);
   } catch (error) {
     console.error('❌ Erro ao logar:', error);
   }
