@@ -11,12 +11,26 @@ const {
     TextInputBuilder,
     TextInputStyle
 } = require('discord.js');
+
 require('dotenv').config();
-console.log("TOKEN carregado:", process.env.TOKEN);
-console.log(process.env.TOKEN);
 
 const fs = require('fs');
 const cron = require('node-cron');
+const express = require("express");
+
+/* ================= SERVIDOR RENDER ================= */
+
+const app = express();
+
+app.get("/", (req, res) => {
+    res.send("Bot online!");
+});
+
+const PORT = process.env.PORT;
+
+app.listen(PORT, () => {
+    console.log("Servidor web iniciado na porta " + PORT);
+});
 
 /* ================= CLIENT ================= */
 
@@ -105,8 +119,6 @@ client.on('messageCreate', async (message) => {
     const args = message.content.split(' ');
     const cmd = args.shift()?.toLowerCase();
 
-    /* ===== PAINEL ===== */
-
     if (cmd === '!painel') {
         if (!isStaff(message.member)) return;
 
@@ -124,8 +136,6 @@ client.on('messageCreate', async (message) => {
 
         return message.channel.send({ embeds: [embed], components: [row] });
     }
-
-    /* ===== RANKING ===== */
 
     if (cmd === '!ranking') {
         const ranking = Object.entries(metas)
@@ -145,8 +155,6 @@ client.on('messageCreate', async (message) => {
                 .setColor('Gold')]
         });
     }
-
-    /* ===== ADD FARM ===== */
 
     if (cmd === '!addfarm') {
         if (!isStaff(message.member)) return;
@@ -179,8 +187,6 @@ client.on('messageCreate', async (message) => {
         });
     }
 
-    /* ===== SET META ===== */
-
     if (cmd === '!setmeta') {
         if (!isStaff(message.member)) return;
 
@@ -190,14 +196,11 @@ client.on('messageCreate', async (message) => {
         if (!user || !meta) return;
 
         garantir(user.id);
-
         metas[user.id].meta = meta;
         salvar();
 
         return message.reply('Meta atualizada.');
     }
-
-    /* ===== HISTORICO ===== */
 
     if (cmd === '!historico') {
         const user = message.mentions.users.first();
@@ -214,8 +217,6 @@ client.on('messageCreate', async (message) => {
         });
     }
 
-    /* ===== RESETAR ===== */
-
     if (cmd === '!resetar') {
         if (!isStaff(message.member)) return;
 
@@ -227,8 +228,6 @@ client.on('messageCreate', async (message) => {
 
         return message.reply('Resetado.');
     }
-
-    /* ===== PUNIR ===== */
 
     if (cmd === '!punir') {
         if (!isStaff(message.member)) return;
@@ -250,8 +249,6 @@ client.on('messageCreate', async (message) => {
 
         return message.reply('Punição registrada.');
     }
-
-    /* ===== LISTAR PUNIÇÕES ===== */
 
     if (cmd === '!punicoes') {
         const user = message.mentions.users.first();
@@ -282,10 +279,8 @@ client.on('interactionCreate', async (interaction) => {
 
     if (interaction.isButton()) {
 
-        /* ===== ABRIR TICKET ===== */
-
         if (interaction.customId === 'abrir_ticket') {
-            // Criar permissão para apenas o usuário e staff verem o ticket
+
             const permissionOverwrites = [
                 {
                     id: interaction.guild.id,
@@ -293,15 +288,20 @@ client.on('interactionCreate', async (interaction) => {
                 },
                 {
                     id: interaction.user.id,
-                    allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
+                    allow: [
+                        PermissionsBitField.Flags.ViewChannel,
+                        PermissionsBitField.Flags.SendMessages
+                    ]
                 }
             ];
 
-            // Adicionar permissões para todos os staff
             for (const roleId of STAFF_ROLE_ID) {
                 permissionOverwrites.push({
                     id: roleId,
-                    allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages]
+                    allow: [
+                        PermissionsBitField.Flags.ViewChannel,
+                        PermissionsBitField.Flags.SendMessages
+                    ]
                 });
             }
 
@@ -310,7 +310,7 @@ client.on('interactionCreate', async (interaction) => {
                 type: ChannelType.GuildText,
                 topic: interaction.user.id,
                 parent: '1474574073274040550',
-                permissionOverwrites: permissionOverwrites
+                permissionOverwrites
             });
 
             const embed = new EmbedBuilder()
@@ -336,14 +336,19 @@ client.on('interactionCreate', async (interaction) => {
                 components: [row]
             });
 
-            return interaction.reply({ content: `Ticket criado: ${canal}`, ephemeral: true });
+            return interaction.reply({
+                content: `Ticket criado: ${canal}`,
+                ephemeral: true
+            });
         }
 
-        /* ===== FECHAR TICKET ===== */
-
         if (interaction.customId === 'fechar_ticket') {
+
             if (!isStaff(interaction.member))
-                return interaction.reply({ content: 'Sem permissão.', ephemeral: true });
+                return interaction.reply({
+                    content: 'Sem permissão.',
+                    ephemeral: true
+                });
 
             const dono = interaction.channel.topic;
 
@@ -356,17 +361,22 @@ client.on('interactionCreate', async (interaction) => {
                     `Data: ${data()}`
                 );
 
-            const logChannel = interaction.guild.channels.cache.get(TICKET_LOG_CHANNEL_ID);
-            if (logChannel) logChannel.send({ embeds: [embed] });
+            const logChannel =
+                interaction.guild.channels.cache.get(TICKET_LOG_CHANNEL_ID);
 
-            await interaction.reply({ content: 'Fechando...', ephemeral: true });
+            if (logChannel)
+                logChannel.send({ embeds: [embed] });
+
+            await interaction.reply({
+                content: 'Fechando...',
+                ephemeral: true
+            });
 
             return interaction.channel.delete();
         }
 
-        /* ===== ENVIAR FARM ===== */
-
         if (interaction.customId === 'enviar_farm') {
+
             const modal = new ModalBuilder()
                 .setCustomId('modal_farm')
                 .setTitle('Enviar Farm');
@@ -375,40 +385,50 @@ client.on('interactionCreate', async (interaction) => {
                 .setCustomId('nome_farm')
                 .setLabel('Nome do Farm')
                 .setStyle(TextInputStyle.Short)
-                .setPlaceholder('Digite o nome do farm')
                 .setRequired(true);
 
             const inputQuantidade = new TextInputBuilder()
                 .setCustomId('quantidade_farm')
                 .setLabel('Quantidade de Farm')
                 .setStyle(TextInputStyle.Short)
-                .setPlaceholder('Digite a quantidade')
                 .setRequired(true);
 
-            const row1 = new ActionRowBuilder().addComponents(inputNomeFarm);
-            const row2 = new ActionRowBuilder().addComponents(inputQuantidade);
-            modal.addComponents(row1, row2);
+            modal.addComponents(
+                new ActionRowBuilder().addComponents(inputNomeFarm),
+                new ActionRowBuilder().addComponents(inputQuantidade)
+            );
 
             return interaction.showModal(modal);
         }
     }
 
-    /* ===== MODAL SUBMIT ===== */
-
     if (interaction.isModalSubmit()) {
 
         if (interaction.customId === 'modal_farm') {
-            const nomeFarm = interaction.fields.getTextInputValue('nome_farm');
-            const quantidade = parseInt(interaction.fields.getTextInputValue('quantidade_farm'));
+
+            const nomeFarm =
+                interaction.fields.getTextInputValue('nome_farm');
+
+            const quantidade = parseInt(
+                interaction.fields.getTextInputValue('quantidade_farm')
+            );
+
             const userId = interaction.channel.topic;
             const user = await client.users.fetch(userId);
 
-            if (!user) return interaction.reply({ content: 'Usuário não encontrado.', ephemeral: true });
+            if (!user)
+                return interaction.reply({
+                    content: 'Usuário não encontrado.',
+                    ephemeral: true
+                });
 
             garantir(userId);
 
             metas[userId].atual += quantidade;
-            metas[userId].historico.push(`+${quantidade} (${nomeFarm}) • Ticket`);
+            metas[userId].historico.push(
+                `+${quantidade} (${nomeFarm}) • Ticket`
+            );
+
             salvar();
 
             const { atual, meta } = metas[userId];
@@ -426,14 +446,19 @@ client.on('interactionCreate', async (interaction) => {
 
             await interaction.reply({ embeds: [embed] });
 
-            // Log no canal de tickets
-            const logChannel = interaction.guild.channels.cache.get(TICKET_LOG_CHANNEL_ID);
+            const logChannel =
+                interaction.guild.channels.cache.get(TICKET_LOG_CHANNEL_ID);
+
             if (logChannel) {
                 logChannel.send({
-                    embeds: [new EmbedBuilder()
-                        .setTitle('📝 Farm Registrado')
-                        .setDescription(`${user} enviou **${quantidade}** de farm (${nomeFarm})`)
-                        .setColor('Green')]
+                    embeds: [
+                        new EmbedBuilder()
+                            .setTitle('📝 Farm Registrado')
+                            .setDescription(
+                                `${user} enviou **${quantidade}** de farm (${nomeFarm})`
+                            )
+                            .setColor('Green')
+                    ]
                 });
             }
         }
@@ -450,5 +475,4 @@ cron.schedule('0 22 * * 5', () => {
 
 /* ================= LOGIN ================= */
 
-require('dotenv').config();
 client.login(process.env.TOKEN);
