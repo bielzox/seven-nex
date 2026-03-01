@@ -489,12 +489,10 @@ cron.schedule('0 22 * * 5', () => {
 
 /* ================= LOGIN ================= */
 
-(async () => {
-  try {
-    console.log("TOKEN carregado?", TOKEN ? "SIM" : "NÃO");
-    console.log('🔐 Tentando login...');
-    await client.login(TOKEN);
-  } catch (error) {
-    console.error('❌ Erro ao logar:', error);
-  }
-})();
+client.login(TOKEN)
+  .then(() => {
+    console.log("LOGIN PROMISE RESOLVIDA");
+  })
+  .catch(err => {
+    console.error("ERRO LOGIN:", err);
+  });
