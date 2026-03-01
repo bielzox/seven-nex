@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const {
     Client,
     GatewayIntentBits,
@@ -105,8 +107,8 @@ function log(guild, embed) {
 
 /* ================= READY ================= */
 
-client.once('ready', () => {
-    console.log('🤖 Bot conectado como ' + client.user.tag);
+client.once('clientReady', () => {
+  console.log(`🤖 Bot conectado como ${client.user.tag}`);
 });
 
 client.on('error', (err) => {
