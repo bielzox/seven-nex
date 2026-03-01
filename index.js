@@ -35,11 +35,18 @@ app.listen(PORT, () => {
 /* ================= CLIENT ================= */
 
 const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent
-    ]
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMembers
+  ]
+});
+
+client.on('debug', console.log);
+
+client.once('clientReady', () => {
+  console.log(`🤖 Bot conectado como ${client.user.tag}`);
 });
 
 /* ================= CONFIG ================= */
