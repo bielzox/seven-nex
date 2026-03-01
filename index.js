@@ -39,8 +39,11 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMembers
-  ]
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.GuildMessageReactions
+  ],
+  partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 });
 
 client.on('debug', console.log);

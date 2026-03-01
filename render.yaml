@@ -4,6 +4,9 @@ services:
     env: node
     buildCommand: npm install
     startCommand: npm start
-    envVars:
-      - key: TOKEN
-        sync: false
+services:
+  - type: web
+    name: botdiscord
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
