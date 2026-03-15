@@ -1,0 +1,76 @@
+{
+  "1474574068379854899": {
+    "channels": {
+      "farmAdded": "1478087747263791247",
+      "farmRemoved": "1478087778574008573",
+      "punishmentAdded": "1478087689151709399",
+      "punishmentRemoved": "1478087653084758206",
+      "metaAdded": "1478087584209961000",
+      "metaRemoved": "1478087607215980605",
+      "farmReset": "1476229162300739604",
+      "farmRegistered": "1478080958942154784",
+      "ticketClosed": "1477858280825946152",
+      "ticketOpened": "1477858328066658376"
+    },
+    "set": {
+      "panelChannel": "1474574077921464379",
+      "cargoMembro": "1474574071072161883",
+      "logChannel": "1478134274287996928",
+      "ticketClosedChannel": "1478190973921136662",
+      "category": "1476227116201807912",
+      "ticketCategory": "1474574073274040550"
+    },
+    "adv": {
+      "category": "1478205849699877029",
+      "cargo1": "1474574071047000289",
+      "cargo2": "1474574071047000288"
+    },
+    "suporte": {
+      "category": "1478205849699877029",
+      "logChannel": "1478470983391379547"
+    },
+    "staffRoles": [
+      "1474574071105589344",
+      "1480321157667360910",
+      "1476191744549847182",
+      "1474574071072161891",
+      "1474574071105589340",
+      "1474574071093268621",
+      "1474574071093268620"
+    ],
+    "defaultMeta": 5000
+  },
+  "1474574071047000285": {
+    "channels": {
+      "farmAdded": null,
+      "farmRemoved": null,
+      "punishmentAdded": null,
+      "punishmentRemoved": null,
+      "metaAdded": null,
+      "metaRemoved": null,
+      "farmReset": null,
+      "farmRegistered": null,
+      "ticketClosed": null,
+      "ticketOpened": null
+    },
+    "set": {
+      "panelChannel": null,
+      "cargoMembro": null,
+      "logChannel": null,
+      "ticketClosedChannel": null,
+      "category": null,
+      "ticketCategory": null
+    },
+    "adv": {
+      "category": null,
+      "cargo1": null,
+      "cargo2": null
+    },
+    "suporte": {
+      "category": null,
+      "logChannel": null
+    },
+    "staffRoles": [],
+    "defaultMeta": 5000
+  }
+}
